@@ -13,26 +13,14 @@ function send404Message(res) {
   res.end();
 }
 
-// 정상적안 요청 200..
-server = http.createServer((req, res) => {
-  let { url } = req;
-  if (req.url === '/') {
-    url = 'Main.html';
-    res.writeHead(200, { 'Content-Type': 'text/html' }); // 웹페이지 출력
-    fs.createReadStream('./Main.html').pipe(res); // 같은 페이지에 있는 Main.html을 response함
-  } else {
-    // file이 존재 하지 않을때,
-    send404Message(res);
-  }
-  const LoginList = {
-    list(req, res) {
-      let sql = 'SELECT * FROM Web'; // 웹 목록
-      dbconn.query(sql, (err, results, field) => {
-                res.render('Web/Weblist', {data : ''})
-            });
-    },
-  };
-});
+function postHandler(req, res, reqUrl){
+    req.setEncoding('utf8');
+    req.on('data', (chunk)=>{
+        res.writeHead(200);
+        res.write('POST parameters : ' + chunk);
+        res.end();
+    });
+}
 
-server.listen(8080);
+.listen(8080);
 console.log('Server Created');
