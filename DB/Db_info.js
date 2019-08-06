@@ -1,33 +1,46 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-plusplus */
+/* eslint-disable func-names */
+/* eslint-disable no-const-assign */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-console */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-destructuring */
+// eslint-disable-next-line prefer-destructuring
+// eslint-disable-next-line no-plusplus
+// eslint-disable-next-line no-plusplus
+// eslint-disable-next-line no-continue
 const mysql = require('mysql');
-const os = require('os'); // 호스트 이름을 가져오기 위한 모듈
 
-const dbConnInfo = {
-  // db 주소록
-  local: {
-    host: '127.0.0.1', // db ip address
-    port: '3306', // db port Number
-    user: 'root', // db id
-    password: 'dudrbehd12!', // db password
-    database: 'Web', // db schema name
-  },
-};
 
-const dbConnection = {
-  init() {
-    const hostname = os.hostname();
-    if (hostname === 'abcd') {
-      return mysql.createConnection(dbConnInfo.local); // 로컬 개발 환경
-    }
-  },
-  db_open(con) {
-    con.connect((err) => {
-      if (err) {
-        console.error('mysql connect error');
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  port: '3306',
+  password: '1004Yoon!',
+  database: 'Web',
+});
+
+connection.connect();
+
+
+function a (require, callback) {
+  connection.query('SELECT userid from user', (error, rows) => {
+    let userid = null;
+    if (error) throw error;
+    console.log('userid : ', rows);
+    for (let i = 0; i < rows.length; i++) {
+      userid = rows[i];
+      if (userid === rows[i]) {
+        callback('success');
       } else {
-        console.info('mysql is connect success');
+        callback('fail');
       }
-    });
-  },
-};
+    }
+  });
+  connection.end();
+}
 
-module.exports = dbConnection;
+module.exports = a;

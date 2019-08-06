@@ -10,20 +10,26 @@
     </style>
 
     <script>
-        window.addEventListener('load', function(){
-            let signup = document.querySelector('#signup');
-            signup.addEventListener('click', function(){
-                let id = document.querySelector('#id');
-                let pw = document.querySelector('#pw');
-                let gender = document.querySelector('#gender');
-                let Phone_Number = document.querySelector('#Number');
-                let E_Mail = document.querySelector('#E_Mail')
-                let age = document.querySelector('#age');
+        function submitForm(formEI){
+            var errorMessage = null;
+            var objFocus = null;
 
-            });
-
-
-        });
+            if(formEI.userid.value.length ==0){
+                errorMessage = alert("아이디를 넣어주세요.");
+                objFocus = formEI.userid;
+            }else if (formEI.password.value.length==0){
+                errorMessage = alert("비밀번호를 넣어주세요.")
+                objFocus = formEI.password;    
+            }
+            if(errorMessage != null){
+                alert(errorMessage);
+                objFocus();
+                return false;
+            }
+            
+            return true;
+        }
+        
     </script>
 
 </head>
@@ -31,27 +37,22 @@
     <div>
         <h1>Node.js 웹 서버</h1>
         <h2>바보1123</h2>
-        <form name="" action="" method="POST"> 
+
+
+        <form name="login_form" action="./Login" method="POST"> 
             <div>            
-                <input class="input_ID"type="text" value="" name ="userid" placeholder="아이디 입력해주세요" maxlength="20">
+                <input id ="input_ID"type="text" value="" name ="userid" placeholder="아이디 입력해주세요" maxlength="20">
             </div>
             <div>
-                <input class ="input_PW"type="password" value="" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
+                <input id ="input_PW"type="password" value="" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
             </div>
             <div>
-                <input type="button" id = "signup" value="signup" >
+                
+                <input type="submit" id = "signup" value="signup" onclick="submitForm" >
                 <input type="reset" value="reset">
             </div>
         </form>
     </div>
-    <script>
-        console.log(`id : ${id} 
-        pw : ${pw} 
-        id : ${id}
-        gender : ${gender}
-        Phone_Number : ${Number}
-        E_Mail : ${E_Mail}
-        ` );
-    </script>
+    
 </body>
 </html>
