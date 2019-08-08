@@ -29,5 +29,5 @@ connection.query('SELECT * from user', (error, rows) => {
   }
 });
 
-connection.end();
+// connection.end();
 module.exports = connection;

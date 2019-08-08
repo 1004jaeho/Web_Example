@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-use-before-define */
 /* eslint-disable padded-blocks */
@@ -32,33 +34,22 @@ const connection = mysql.createConnection({
 connection.connect();
 
 
-function a (require, callback) { 
-  connection.query('SELECT userid,password from user', (error, rows) => {
-    if (error) throw error;
-    console.log('rows : ', rows);
-    for (let i = 0; i < rows.length; i++) {
-      db_userid = rows[i].userid;
-      db_password = rows[i].password;
-      console.log(`db_userid : ${db_userid} db_password : ${db_password}`);
-      set(db_userid, db_password);
-      
-      if (db_userid === rows[i].userid && db_password === rows[i].db_password) {
-        callback('success');
-      } else {
-
-        callback('fail'); 
-      }
-      
-      
-    }
+function a(id, pw, callback) { 
+  connection.query(`SELECT userid from user WHERE userid = '${id}' AND password = '${pw}' LIMIT 1`, (error, rows) => {
+    if (error) console.log(error);
+    console.log(rows);
     
+    if (rows.length !== 0) {
+      console.log('rows====================');
+      console.log(rows);
+      console.log(rows.userid);
+      console.log(rows[0].userid);
+      callback('success');
+    } else {
+      callback('fail'); 
+    }
+    // connection.end();
   });
-  connection.end();
 }
-
-function set (db_userid, db_password) { 
-  console.log(` set 함수 db_userid : ${db_userid} db_password : ${db_password}`);
-}
-
 
 module.exports = a;
