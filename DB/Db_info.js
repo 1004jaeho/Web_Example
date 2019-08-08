@@ -34,16 +34,38 @@ const connection = mysql.createConnection({
 connection.connect();
 
 
+//  회원가입 기능
+function b(userid, password, username, gender, Phone_Number, E_Mail, User_age, callback) {
+  let sql = 'INSERT INTO user (userid, password, username, gender, Phone_Number, E_mail, User_age) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, function(error, rows) {
+    //  에러가 뜬다면
+    if (error) {
+      console.log(error);
+    } 
+    //  회원가입할려는 데이터가 들어왔는지 확인
+    if (userid.length !== 0 && password.length !== 0
+      && username.length !== 0 && gender.length !== 0
+      && Phone_Number.length !== 0 && E_Mail.length !== 0
+      && User_age.length !== 0 
+    ) {
+      callback('success');
+    } else {
+      callback('fail');
+    }
+  });
+}
+
+//  로그안 기능
 function a(id, pw, callback) { 
-  connection.query(`SELECT userid from user WHERE userid = '${id}' AND password = '${pw}' LIMIT 1`, (error, rows) => {
-    if (error) console.log(error);
-    console.log(rows);
+  connection.query(`SELECT userid from user WHERE userid = '${id}' AND password = '${pw}'`, (error, rows) => {
     
-    if (rows.length !== 0) {
-      console.log('rows====================');
-      console.log(rows);
-      console.log(rows.userid);
-      console.log(rows[0].userid);
+    console.log(`a == == id : ${id} pw : ${pw}`);
+    
+    if (error) console.log(error);
+    
+    
+    if (rows[0].userid === id) {
+      console.log(`success : ${rows.length}`);
       callback('success');
     } else {
       callback('fail'); 

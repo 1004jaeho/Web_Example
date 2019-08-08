@@ -36,23 +36,17 @@ function onRequest(request, response) {
     request.on('data', (chunk) => {
       data += chunk;
     });
-
     request.on('end', () => {
-      console.log(data);
-      //  데이터 넘기기
-      // get(data.userid, function(cm_userid) {
-      //   console.log(cm_userid);
-      // });
-      
+      const chunk_type = querystring.parse(data);
       //  데이터 비교후 값 출력
-      post(request, data, function(result) {
+      post(request, chunk_type, function(result) {    
         console.log(result);
         if (result === 'success') {
-          response.writeHead(200, { 'Content-Type': 'text' }); // header 설정
-          response.end(1);
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('success');
         } else if (result === 'fail') {
-          response.writeHead(200, { 'Content-Type': 'text' }); // header 설정
-          response.end(2);
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('fail');
         }
       });   
     });
@@ -64,20 +58,13 @@ function onRequest(request, response) {
 }
 
 
-//  데이터 저장
-function get(userid, callback) {
-  const cm_userid = userid;  
-  callback(cm_userid);
-}
-
-
-function post(request, data, callback) {
+function post(request, chunk_type, callback) {
   const path = url.parse(request.url, true).pathname; // url에서 path 추출
-  const id = data.userid;
-  const pw = data.password;
-  console.log(id, pw);
+  const id = chunk_type.userid;
+  const pw = chunk_type.password; 
   if (path === '/Login') { // 주소가 /Login이면
     a(id, pw, (result) => {
+      console.log(result);
       callback(result);
     });
   } else { // 매칭되는 주소가 없으면
@@ -86,8 +73,5 @@ function post(request, data, callback) {
   }
 }
 
-
 http.createServer(onRequest).listen(8080);
 console.log('Server Created...');
-
-module.exports = get;

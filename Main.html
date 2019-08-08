@@ -9,54 +9,43 @@
         
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-        // $(document).ready(function () {
-            
-        
-        // });
-
-        </script>
 </head>
 <body>
     <div>
         <h1>Node.js 웹 서버</h1>
         <h2>바보1123</h2>
 
-
-        <form id="login_form" name="login_form" action="./Login" method="POST"> 
-            <div>            
-                <input id ="input_ID"type="text" value="" name ="userid" placeholder="아이디 입력해주세요" maxlength="20">
-            </div>
-            <div>
-                <input id ="input_PW"type="password" value="" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
-            </div>
-            <div>
-                <input type="submit" id = "signup" name="signup" value="signup" onclick="submitForm()">
+            
+            <div>          
+                <input id ="input_ID" type="text" name="userid" placeholder="아이디 입력해주세요" maxlength="20">
+                <input id ="input_PW" type="password" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
+                <button type="button" id = "login" name="#login">로그인 </button>
                 <input type="reset" value="reset">
             </div>
-        </form>
+            
+            <a href="http://localhost:8080/New_Member.html">회원가입 </a>
 
-
+        <!-- 
         <div>
             <input type="text" id="new_userId" />
             <input type="password" id="new_password" />
-            <button id="login">로그인</button>
-        </div>
+            <button id="login">로그인</button>     
+        </div> 
+        -->
     </div>
     
 
     <script>
         $('#login').click(() => {
-            const id = $('#new_userId').val();
-            const pw = $('#new_password').val();
-
+            const id = $('#input_ID').val();
+            const pw = $('#input_PW').val();
+            document.write(id,pw);
             $.ajax({
                 type : 'POST',
-                url : '/Login', // test.jsp 에서 받아옴
+                url : '/Login', 
                 data: {userid : id, password : pw},
                 success : function(res) {
-                    console.log(res);
-                    if (res === 'post_result : success') {
+                    if (res === 'success') {
                         alert('success')
                     } else {
                         alert('fail')
