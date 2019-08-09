@@ -35,13 +35,14 @@ connection.connect();
 
 
 //  회원가입 기능
-function b(userid, password, username, gender, Phone_Number, E_Mail, User_age, callback) {
-  let sql = 'INSERT INTO user (userid, password, username, gender, Phone_Number, E_mail, User_age) VALUES (?, ?, ?, ?, ?, ?, ?)';
+function b(userid, username, gender, Phone_Number, E_Mail, User_age, password, callback) {
+  let seq = 1;
+  console.log(`왜 : ${userid}, ${username}, ${gender}, ${Phone_Number}, ${E_Mail}, ${User_age}, ${password}`);
+  
+  let sql = `INSERT INTO user (userid, username, gender, Phone_Number, E_mail, User_age, password) VALUES (${userid}, ${username}, ${gender}, ${Phone_Number}, ${E_Mail}, ${User_age}, ${password})`;
   connection.query(sql, function(error, rows) {
     //  에러가 뜬다면
-    if (error) {
-      console.log(error);
-    } 
+    if (error) { console.log(error); } 
     //  회원가입할려는 데이터가 들어왔는지 확인
     if (userid.length !== 0 && password.length !== 0
       && username.length !== 0 && gender.length !== 0
@@ -49,6 +50,7 @@ function b(userid, password, username, gender, Phone_Number, E_Mail, User_age, c
       && User_age.length !== 0 
     ) {
       callback('success');
+      seq++;
     } else {
       callback('fail');
     }
@@ -74,4 +76,4 @@ function a(id, pw, callback) {
   });
 }
 
-module.exports = a;
+module.exports = { a, b };
