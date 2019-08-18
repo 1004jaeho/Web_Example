@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        tr, th, td{
+            border: 1px solid black;
+            height: 30px;
+        }
+    
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <h1>게시판 보기</h1>
+
+    <table>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+        </tr>
+        
+        <tr>
+            <td id="idx"></td>
+            <td id="title"></td>
+            <td id="writer"></td>
+            
+        </tr>
+    </table>
+</script>
+    <button type="button" id="New" >게시판 글보기</button>
+    <script>
+        //  게시판 글쓰기 클릭시 데이터 추출
+        $('#New').click(() => { 
+            $.ajax({
+                type : 'POST',
+                url : '/View', 
+                // datatype : 'json',
+                success : function(res) {
+                    document.write(res);
+                    for(let i =0; i<res.idx; i++){
+                        document.write(`res[${i}] :  ${res[i]}`);
+                    }
+                },
+                error : function(err) {
+                    console.log(err);
+                }
+            });
+        });
+
+        //  데이터 추출까지는 적용 완료 그후 html에 데이터를 표현해야함;
+        //  XMLHttpRequest를 이용해서 데이터 출력 가능 할수도. 페이지 https://gomdoreepooh.github.io/notes/ajax-by-nodejs 
+        //  저기 링크로 들어가봅시다.
+
+        //  json데이터를 받아서 html 게시판 보기에 출력
+        $(document).ready(function() {
+                $.getJSON( 'http://localhost:8080/View.html', function( data ) {
+                    console.log(data);
+                    console.log('122313');
+                    $.each(data["idx"], function(key, value) {
+                        $("#idx").append("<li>" + key + ": " + value + "</li>\n");
+                    });
+                    $.each(data["title"], function(key, value) {
+                        $("#albums").append("<li>" + key + ": " + value + "</li>\n");
+                    });
+                    $.each(data["writer"], function(key, value) {
+                        $("#writer").append("<li>" + key + ": " + value + "</li>\n");
+                    });
+                });
+            });
+
+    </script>
+
+</body>
+</html>

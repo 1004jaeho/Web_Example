@@ -6,14 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Main </title>
     <style>
-        
+        tr, th, td{
+            border: 1px solid black;
+            height: 30px;
+
+        }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript">
+    </script> 
 </head>
 <body>
-    <div>
+    
         <h1>Node.js 웹 서버</h1>
         <h2>바보1123</h2>
+        <!-- 로그인 -->
             <div>          
                 <input id ="input_ID" type="text" name="userid" placeholder="아이디 입력해주세요" maxlength="20">
                 <input id ="input_PW" type="password" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
@@ -21,6 +27,7 @@
                 <input type="reset" value="reset">
             </div> 
 
+            <!-- 회원가입 -->
             <div>
                 <input type="text" id="userid" name="userid" placeholder="아이디를 입력하세요.">
                 <input type="text" id="username" name="username" placeholder="이름을 입력하세요.">
@@ -33,18 +40,15 @@
                 <input type="reset" value="리셋">
             </div>
 
-
-        <!-- 
-        <div>
-            <input type="text" id="new_userId" />
-            <input type="password" id="new_password" />
-            <button id="login">로그인</button>     
-        </div> 
-        -->
-    </div>
+            <!-- 게시판 -->
+            <form method="post" action="Board.html" >
+            <a href="/Board.html"> 게시판 </a>
+            </form>
+        </div>
     
 
     <script>
+        //  로그인
         $('#login').click(() => {
             const id = $('#input_ID').val();
             const pw = $('#input_PW').val();
@@ -81,6 +85,7 @@
         //     });
         // });
         
+        //  회원가입
         $('#New_Member').click(() => {
             //  값들을 저장하였습니다.
             const id = $('#userid').val();
@@ -101,7 +106,7 @@
                 //  성공하면 여기 부분이 콜백됨 
                 success : function (res) {
                     if(res==='success')
-                    alert('회원가입 성공')
+                    alert('회원가입 성공');
                 },
                 //  실패하면 에러를 콜백함
                 error : function (err) {
@@ -109,6 +114,8 @@
                 } 
             });
         });
+
+
     </script>
 </body>
     

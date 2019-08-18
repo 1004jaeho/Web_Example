@@ -1,3 +1,7 @@
+/* eslint-disable no-new-wrappers */
+/* eslint-disable no-shadow */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-trailing-spaces */
@@ -33,12 +37,9 @@ function send404Message(response) {
 //  데이터를 주고 그값을 a콜백으로 호출해서 데이터를 넘긴다음 값을 비교
 function post(request, chunk_type, callback) {
   const path = url.parse(request.url, true).pathname; // url에서 path 추출
-  
   //  로그인 데이터들
   const id = chunk_type.userid;
   const pw = chunk_type.password;
-
-  
   //  로그인 페이지
   if (path === '/Login') { // 주소가 /Login이면
     DB.a(id, pw, (result) => {
@@ -61,6 +62,32 @@ function post(request, chunk_type, callback) {
       //  b함수의 callback 값을 들고온다
       callback(result);
     });
+  } else if (path === '/Write_Action') {
+    //  게시판 글쓰기
+    const title = chunk_type.Write_title;
+    const text = chunk_type.Write_text;
+    const writer = chunk_type.Write_writer;
+
+    console.log(chunk_type);
+    
+    DB.c(title, text, writer, function(result) {
+      callback(result);
+    });
+  } else if (path === '/View') {
+    //  게시판 보기
+    const title = chunk_type.title;
+    const idx = chunk_type.idx;
+    const writer = chunk_type.writer;
+    console.log(title, idx, writer);
+    DB.d(title, idx, writer, function(result) {
+      callback(result);
+      console.log(request);
+    });
+  } else if (path === '/Update_Action') {
+    //  수정 하기
+    const title = chunk_type.Write_title;
+    const text = chunk_type.Write_text;
+    const writer = chunk_type.Write_writer;
   } else { // 매칭되는 주소가 없으면
     response.statusCode = 404; // 404 상태 코드
     response.end('주소가 없습니다');
@@ -80,7 +107,7 @@ let server = http.createServer(function(request, response) {
     request.on('data', (chunk) => {
       data += chunk;
     });
-    //  로그인 기능
+    //  ======로그인 기능=====
     request.on('end', () => {
       const chunk_type = querystring.parse(data);
       //  데이터 비교후 값 출력
@@ -95,7 +122,7 @@ let server = http.createServer(function(request, response) {
         }
       });
     });
-    //    =========회원가입=======
+    //  =========회원가입=======
   } else if (request.method === 'POST' && request.url === '/New_Member') {
     let information = '';
     request.on('data', (chunk) => {
@@ -117,10 +144,120 @@ let server = http.createServer(function(request, response) {
         }
       });
     });
+  } else if (request.method === 'GET' && request.url === '/Board.html') {
+    //  ======게시판 사이트 들어가는곳=========
+    fs.readFile('Board.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+  } else if (request.method === 'GET' && request.url === '/Write.html') {
+    //  ======글쓰기 사이트 들어가는곳========
+    fs.readFile('Write.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+  } else if (request.method === 'POST' && request.url === '/Write_Action') {
+    //  게시판 글쓰는 곳
+    let board = '';
+    request.on('data', (chunk) => {
+      board += chunk;
+    });
+    console.log(`게시판 데이터 : ${board}`);
+    request.on('end', () => {
+      const chunk_type = querystring.parse(board);
+      post(request, chunk_type, function(result) {
+        console.log(result);
+        //  여기서부터 게시판 글쓰기  성공 여부
+        if (result === 'success') {
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('success');
+        } else {
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('fail');
+        }
+      });
+    });
+  } else if (request.method === 'POST' && request.url === '/Board') {
+    let board = '';
+    request.on('data', (chunk) => {
+      board += chunk;
+    });
+    request.on('end', () => {
+      const chunk_type = querystring.parse(board);
+      
+      post(request, chunk_type, function(result) {
+        response.writeHead(200, { 'Content-Type': 'ajax' }); // header 설정
+        response.end('바보');
+      });
+    });
+  } else if (request.method === 'GET' && request.url === '/Update.html') {
+    //  수정 페이지 추출
+    fs.readFile('Update.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+  } else if (request.method === 'POST' && request.url === '/Update_Action') {
+    let update = '';
+    request.on('data', (chunk) => {
+      update += chunk;
+    });
+    request.on('end', function(result) {
+      chunk_type = querystring.parse(update);
+      post(request, chunk_type, function(result) {
+        console.log(result);
+        //  수저 완료 비교
+        if (result === 'success') {
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('success');
+        } else {
+          response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
+          response.end('fail');
+        }
+      });
+    });
+  } else if (request.method === 'POST' && request.url === '/Delete') {
+    //   글 삭제 
+  } else if (request.url === '/View.html' && request.method === 'GET') {
+    //  게시판 보기 페이지 
+    fs.readFile('View.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+    request.on('data', (chunk) => {
+      let data = [];
+      data.push(chunk);
+      console.log(chunk);
+      DB.g(function(result) {
+        console.log(result);
+        // response.writeHead(200, { 'Content-Type': 'text/plain' });
+        // response.end(result);
+      });
+    // }).on('end', () => {
+    //   data = Buffer.concat(data).toString();
+    //   console.log(data);
+    });
+  } else if (request.url === '/View' && request.method === 'POST') {
+    let date = [];
+    request.on('data', (chunk) => {
+      date += chunk;
+      console.log(date);
+    }).on('end', () => {
+      console.log('2');
+      // date = querystring.parse(date);
+      console.log('1');
+      DB.g(function(result) {
+        // console.log(result);
+        date = JSON.stringify(result);
+        
+        console.log(date);
+        response.writeHead(200, { 'Content-Type': 'application/JSON' });
+        response.end(date);
+      });
+      // console.log(date);
+    });
   } else {
     //  post도 아니고 get도 아닌 경우!
     response.send404Message = 404;
     send404Message(response);
   }
-  //  회원가입 기능
 }).listen(8080);
