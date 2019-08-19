@@ -125,15 +125,12 @@ function a(id, pw, callback) {
     console.log(`a == == id : ${id} pw : ${pw}`);
     
     if (error) console.log(error);
-    
-    
+    console.log(`success : ${rows[0].userid}`);
     if (rows[0].userid === id) {
-      console.log(`success : ${rows.length}`);
       callback('success');
     } else {
       callback('fail'); 
     }
-    // connection.end();
   });
 }
 

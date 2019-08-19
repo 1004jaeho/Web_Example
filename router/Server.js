@@ -38,12 +38,12 @@ function send404Message(response) {
 function post(request, chunk_type, callback) {
   const path = url.parse(request.url, true).pathname; // url에서 path 추출
   //  로그인 데이터들
-  const id = chunk_type.userid;
-  const pw = chunk_type.password;
+  
   //  로그인 페이지
-  if (path === '/Login') { // 주소가 /Login이면
+  if (path === '/html/Login') { // 주소가 /Login이면
+    const id = chunk_type.userid;
+    const pw = chunk_type.password;
     DB.a(id, pw, (result) => {
-      console.log(result);
       callback(result);
     });
   } else if (path === '/New_Member') {
@@ -62,7 +62,7 @@ function post(request, chunk_type, callback) {
       //  b함수의 callback 값을 들고온다
       callback(result);
     });
-  } else if (path === '/Write_Action') {
+  } else if (path === '/html/Write') {
     //  게시판 글쓰기
     const title = chunk_type.Write_title;
     const text = chunk_type.Write_text;
@@ -102,16 +102,30 @@ let server = http.createServer(function(request, response) {
   if (request.method === 'GET' && request.url === '/') {
     response.writeHead(200, { 'Content-Type': 'text/html' }); // 웹페이지 출력
     fs.createReadStream('./Main.html').pipe(response); // 같은 디렉토리에 있는 index.html를 response 함
-  } else if (request.method === 'POST' && request.url === '/Login') {
+  } else if (request.method === 'GET' && request.url === '/html/Login.html') {
+    //  게시판 메인 페이지
+    fs.readFile('html/Login.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+  } else if (request.method === 'GET' && request.url === '/html/New_Member.html') {
+    fs.readFile('html/New_Member.html', function(error, data) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(data);
+    });
+  } else if (request.method === 'POST' && request.url === '/html/Login') {
+    console.log('1');
     let data = '';
     request.on('data', (chunk) => {
       data += chunk;
     });
     //  ======로그인 기능=====
     request.on('end', () => {
+      console.log('2');
       const chunk_type = querystring.parse(data);
       //  데이터 비교후 값 출력
       post(request, chunk_type, function(result) {
+        console.log('3');
         console.log(result);
         if (result === 'success') {
           response.writeHead(200, { 'Content-Type': 'text/plain' }); // header 설정
@@ -144,19 +158,19 @@ let server = http.createServer(function(request, response) {
         }
       });
     });
-  } else if (request.method === 'GET' && request.url === '/Board.html') {
+  } else if (request.method === 'GET' && request.url === '/html/Board.html') {
     //  ======게시판 사이트 들어가는곳=========
-    fs.readFile('Board.html', function(error, data) {
+    fs.readFile('html/Board.html', function(error, data) {
       response.writeHead(200, { 'Content-Type': 'text/html' });
       response.end(data);
     });
-  } else if (request.method === 'GET' && request.url === '/Write.html') {
+  } else if (request.method === 'GET' && request.url === '/html/Write.html') {
     //  ======글쓰기 사이트 들어가는곳========
-    fs.readFile('Write.html', function(error, data) {
+    fs.readFile('html/Write.html', function(error, data) {
       response.writeHead(200, { 'Content-Type': 'text/html' });
       response.end(data);
     });
-  } else if (request.method === 'POST' && request.url === '/Write_Action') {
+  } else if (request.method === 'POST' && request.url === '/html/Write') {
     //  게시판 글쓰는 곳
     let board = '';
     request.on('data', (chunk) => {
@@ -164,6 +178,7 @@ let server = http.createServer(function(request, response) {
     });
     console.log(`게시판 데이터 : ${board}`);
     request.on('end', () => {
+      console.log('1');
       const chunk_type = querystring.parse(board);
       post(request, chunk_type, function(result) {
         console.log(result);
@@ -215,45 +230,17 @@ let server = http.createServer(function(request, response) {
         }
       });
     });
-  } else if (request.method === 'POST' && request.url === '/Delete') {
-    //   글 삭제 
-  } else if (request.url === '/View.html' && request.method === 'GET') {
-    //  게시판 보기 페이지 
-    fs.readFile('View.html', function(error, data) {
-      response.writeHead(200, { 'Content-Type': 'text/html' });
-      response.end(data);
-    });
-    request.on('data', (chunk) => {
-      let data = [];
-      data.push(chunk);
-      console.log(chunk);
-      DB.g(function(result) {
-        console.log(result);
-        // response.writeHead(200, { 'Content-Type': 'text/plain' });
-        // response.end(result);
-      });
-    // }).on('end', () => {
-    //   data = Buffer.concat(data).toString();
-    //   console.log(data);
-    });
-  } else if (request.url === '/View' && request.method === 'POST') {
+  } else if (request.method === 'POST' &&  request.url === '/html/Board') {
+    //  게시판 목록 메인페이지
     let date = [];
     request.on('data', (chunk) => {
       date += chunk;
-      console.log(date);
     }).on('end', () => {
-      console.log('2');
-      // date = querystring.parse(date);
-      console.log('1');
       DB.g(function(result) {
-        // console.log(result);
         date = JSON.stringify(result);
-        
-        console.log(date);
         response.writeHead(200, { 'Content-Type': 'application/JSON' });
         response.end(date);
       });
-      // console.log(date);
     });
   } else {
     //  post도 아니고 get도 아닌 경우!
@@ -261,3 +248,9 @@ let server = http.createServer(function(request, response) {
     send404Message(response);
   }
 }).listen(8080);
+  // else if (request.url === '/View.html' && request.method === 'GET') {
+  //   //  게시판 보기 페이지 
+  //   fs.readFile('View.html', function(error, data) {
+  //     response.writeHead(200, { 'Content-Type': 'text/html' });
+  //     response.end(data);
+  //   }); } 

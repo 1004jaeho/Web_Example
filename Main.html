@@ -18,105 +18,12 @@
 <body>
     
         <h1>Node.js 웹 서버</h1>
-        <h2>바보1123</h2>
-        <!-- 로그인 -->
-            <div>          
-                <input id ="input_ID" type="text" name="userid" placeholder="아이디 입력해주세요" maxlength="20">
-                <input id ="input_PW" type="password" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
-                <button type="button" id = "login" name="#login">로그인 </button>
-                <input type="reset" value="reset">
-            </div> 
-
-            <!-- 회원가입 -->
-            <div>
-                <input type="text" id="userid" name="userid" placeholder="아이디를 입력하세요.">
-                <input type="text" id="username" name="username" placeholder="이름을 입력하세요.">
-                <input type="text" id="gender" name="gender" placeholder="성별을 입력하세요.">
-                <input type="text" id="Phone_Number" name="Phone_Number" placeholder="전화번호를 입력하세요.">
-                <input type="text" id="E_Mail" name="E_Mail" placeholder="이메일을 입력하세요.">
-                <input type="text" id="userage" name="userage" placeholder="나이를 입력하세요.">
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
-                <button type="button" id="New_Member">회원가입</button>
-                <input type="reset" value="리셋">
-            </div>
-
-            <!-- 게시판 -->
-            <form method="post" action="Board.html" >
-            <a href="/Board.html"> 게시판 </a>
-            </form>
-        </div>
+            <a href="/html/Login.html">로그인</a>
+            <a href="/html/New_Member.html">회원가입</a>
+            
     
 
-    <script>
-        //  로그인
-        $('#login').click(() => {
-            const id = $('#input_ID').val();
-            const pw = $('#input_PW').val();
-            document.write(id,pw);
-            $.ajax({
-                type : 'POST',
-                url : '/Login', 
-                data: {userid : id, password : pw},
-                success : function(res) {
-                    if (res === 'success') {
-                        alert('success')
-                    } else {
-                        alert('fail')
-                    }
-                },
-                error : function(err) {
-                    console.log(err);
-                    alert('실패');
-                }
-            });
-        });
-        
-        // $('#New_Member').click(() => { 
-        //     $.ajax({
-        //         type : 'POST',
-        //         url : '/New_Member', 
-        //         success : function(res) {
-        //             alert('성공');
-        //         },
-        //         error : function(err) {
-        //             console.log(err);
-        //             alert('실패');
-        //         }
-        //     });
-        // });
-        
-        //  회원가입
-        $('#New_Member').click(() => {
-            //  값들을 저장하였습니다.
-            const id = $('#userid').val();
-            const name = $('#username').val();
-            const gender = $('#gender').val();
-            const p_n = $('#Phone_Number').val();
-            const e_m = $('#E_Mail').val();
-            const age = $('#userage').val();
-            const pw = $('#password').val();    
-            $.ajax({
-                type : "POST",
-                data : {userid : id, username : name,
-                    gender : gender, Phone_Number: p_n,
-                    E_mail : e_m, userage : age,
-                    password : pw,
-                },
-                url : '/New_Member',
-                //  성공하면 여기 부분이 콜백됨 
-                success : function (res) {
-                    if(res==='success')
-                    alert('회원가입 성공');
-                },
-                //  실패하면 에러를 콜백함
-                error : function (err) {
-                    alert(err);
-                } 
-            });
-        });
-
-
-    </script>
+    
 </body>
     
 </html>

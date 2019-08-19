@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <h1>회원가입 페이지</h1>
+    <!-- 회원가입 -->
+    <div>
+            <input type="text" id="userid" name="userid" placeholder="아이디를 입력하세요.">
+            <input type="text" id="username" name="username" placeholder="이름을 입력하세요.">
+            <input type="text" id="gender" name="gender" placeholder="성별을 입력하세요.">
+            <input type="text" id="Phone_Number" name="Phone_Number" placeholder="전화번호를 입력하세요.">
+            <input type="text" id="E_Mail" name="E_Mail" placeholder="이메일을 입력하세요.">
+            <input type="text" id="userage" name="userage" placeholder="나이를 입력하세요.">
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+            <button type="button" id="New_Member">회원가입</button>
+            <input type="reset" value="리셋">
+        </div>
+    </div>
+
+    <script>
+        
+            //  회원가입
+            $('#New_Member').click(() => {
+                //  값들을 저장하였습니다.
+                const id = $('#userid').val();
+                const name = $('#username').val();
+                const gender = $('#gender').val();
+                const p_n = $('#Phone_Number').val();
+                const e_m = $('#E_Mail').val();
+                const age = $('#userage').val();
+                const pw = $('#password').val();    
+                $.ajax({
+                    type : "POST",
+                    data : {userid : id, username : name,
+                        gender : gender, Phone_Number: p_n,
+                        E_mail : e_m, userage : age,
+                        password : pw,
+                    },
+                    url : '/New_Member',
+                    //  성공하면 여기 부분이 콜백됨 
+                    success : function (res) {
+                        if(res==='success') {
+                            window.location.href="http://localhost:8080/html/Login.html";
+                        }
+                    },
+                    //  실패하면 에러를 콜백함
+                    error : function (err) {
+                        alert(err);
+                    } 
+                });
+            });
+    
+    
+        </script>
+
+</body>
+</html>

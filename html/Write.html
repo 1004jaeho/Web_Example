@@ -16,9 +16,14 @@
         <textarea id="Write_text" name="text" placeholder="내용을 입력하세요."></textarea>
         <input type="text" id="Write_writer" name="writer" placeholder="작성자를 입력하세요">
         <button type="button" id="Write" >저장</button>
-        <input type="reset" value="리셋">
+        <button type="reset" id = "reset" > reset </button>
     </div>
     <script>
+        //  리셋
+        $('#reset').click(()=> {
+            window.location.href="http://localhost:8080/html/Write.html";
+        })
+        //  글쓰기 
         $('#Write').click(() => {
             const title= $('#Write_title').val();
             const text = $('#Write_text').val();
@@ -26,12 +31,14 @@
             $.ajax({
                 type : 'POST',
                 data: {Write_title : title, Write_text : text, Write_writer : writer},
-                url : '/Write_Action', 
+                url : '/html/Write', 
                 success : function(res) {
                     if (res === 'success') {
                         alert('글등록 성공');
+                        window.location.href="http://localhost:8080/html/Board.html";
                     } else {
                         alert('글등록 실패');
+                        window.location.href="http://localhost:8080/html/Write.html";
                     }
                 },
                 error : function(err) {

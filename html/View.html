@@ -13,7 +13,9 @@
     
     </style>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript">
+        
+    </script>
 </head>
 <body>
     <h1>게시판 보기</h1>
@@ -22,59 +24,60 @@
         <tr>
             <th>번호</th>
             <th>제목</th>
+            <th>내용</th>
             <th>글쓴이</th>
-        </tr>
-        
-        <tr>
-            <td id="idx"></td>
-            <td id="title"></td>
-            <td id="writer"></td>
             
         </tr>
     </table>
-</script>
+    
     <button type="button" id="New" >게시판 글보기</button>
     <script>
         //  게시판 글쓰기 클릭시 데이터 추출
+        
         $('#New').click(() => { 
+            let str;
             $.ajax({
                 type : 'POST',
                 url : '/View', 
-                // datatype : 'json',
+                dataType : "json",
                 success : function(res) {
-                    document.write(res);
-                    for(let i =0; i<res.idx; i++){
-                        document.write(`res[${i}] :  ${res[i]}`);
-                    }
+                // $("#dataArea").html(res);
+                
+                $(res).each(function(key, value){
+                    
+                    title = (this.title);//jtbc, kbs. sbs, mbc
+                    writer = (this.writer);//드라마
+                    text =(this.text);
+                    idx = (this.idx);
+                    str = '<tr><td><a href="http://localhost:8080/Update.html?idx=?">' + title + '</a></td>';
+                    str += '<td>' + writer + '</td>';
+                    str += '<td>' + text + '</td>';
+                    str += '<td>' + idx + '</td>';
+                    $('table').append(str);
+                });
+                
+                    // $("#idx").html(idx);
+                    // $("#title").html(title);
+                    // $("#text").html(text);
+                    // $("#writer").html(writer);
+
+                    // $("#idx").html(idx);
+                    // $("#title").html(title);
+                    // $("#text").html(text);
+                    // $("#writer").html(writer);
+                    
                 },
+
                 error : function(err) {
                     console.log(err);
                 }
             });
         });
-
         //  데이터 추출까지는 적용 완료 그후 html에 데이터를 표현해야함;
         //  XMLHttpRequest를 이용해서 데이터 출력 가능 할수도. 페이지 https://gomdoreepooh.github.io/notes/ajax-by-nodejs 
         //  저기 링크로 들어가봅시다.
-
         //  json데이터를 받아서 html 게시판 보기에 출력
-        $(document).ready(function() {
-                $.getJSON( 'http://localhost:8080/View.html', function( data ) {
-                    console.log(data);
-                    console.log('122313');
-                    $.each(data["idx"], function(key, value) {
-                        $("#idx").append("<li>" + key + ": " + value + "</li>\n");
-                    });
-                    $.each(data["title"], function(key, value) {
-                        $("#albums").append("<li>" + key + ": " + value + "</li>\n");
-                    });
-                    $.each(data["writer"], function(key, value) {
-                        $("#writer").append("<li>" + key + ": " + value + "</li>\n");
-                    });
-                });
-            });
 
     </script>
-
 </body>
 </html>
