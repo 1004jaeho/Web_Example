@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
@@ -120,11 +122,11 @@ function New_Member(userid, username, gender, Phone_Number, E_Mail, User_age, pa
 }
 
 //  게시판 글쓰기
-function Write(title, text, writer, callback) {   
-    const sql = `INSERT INTO Board (title, text, writer) VALUES (${title}, ${text}, ${writer})`;
+function Write(title, text, writer, callback) {
+    let sql = `INSERT INTO Board (title, text, writer) VALUES ("${title}", "${text}", "${writer}")`;
     connection.query(sql, (error, rows) => {
       //  에러가 뜬다면
-        if (error) { console.log(error); } 
+        if (error) { console.log(error); }
         //  게시판 글쓰기할려는 데이터가 들어왔는지 확인
         if (title.length !== 0 && text.length !== 0 && writer.length !== 0) {
             callback('success');

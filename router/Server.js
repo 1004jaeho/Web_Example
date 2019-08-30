@@ -340,11 +340,12 @@ function post(request, chunk_type, callback) {
       const title = chunk_type.Write_title;
       const text = chunk_type.Write_text;
       const writer = chunk_type.Write_writer;
-      console.log(chunk_type); 
+      console.log(chunk_type);
       DB.Write(title, text, writer, function(result) {
+          console.log(result);
           callback(result);
       });
-    } 
+    }
 }
 
 // else if (request.url ===`/HTML/Page`){

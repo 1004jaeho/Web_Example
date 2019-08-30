@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-useless-concat */
 /* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
@@ -20,18 +21,31 @@ let a = 0;
 const b = 5;
 let i;
 let totalCount; //  전페 게시글수
+/* ajax로 게시글 몇개인지 받아오기 */
+$.ajax({
+    type: 'GET',
+    url: '/HTML/Page',
+    dataType: 'json',
+    async: false,
+    success(res) {
+        const res1 = JSON.stringify(res);
+        totalCount = res[0].idx;
+        console.log(`totlacount1 : ${totalCount} `);
+    },
+});
 
+
+console.log(`total : ${totalCount}`);
 let idx; let title; let text; let wrtier;
 /* 데이터 목록 */
 $().ready(() => {
-    console.log(`11.${a}`);
     $.ajax({
     type: 'GET',
     url: '/HTML/Board_List',
     data: { a, b },
     dataType: 'json',
     success(res) {
-        console.log(a);
+        console.log(`a : ${a}`);
         const res1 = JSON.stringify(res); 
         console.log(`res : ${res1} a : ${a}, b : ${b}`);
         
@@ -56,9 +70,9 @@ $().ready(() => {
             const next = countPage - 1; // 다음 화면 페이지 1~9, 10부터 19까지
             const prev = first_page; // 이전 화면 펭지ㅣ 10~19 였다면 1~9까지
             // console.log(idx, last_page, totalPage);
-            if (totalCount % countList > 0) {
-                totalPage++; //  게시글수와 페이지나타내는 수랑 비교해서 나머지가 있으면 페이지 추가
-            }
+            // if (totalCount % countList > 0) {
+            //     totalPage++; //  게시글수와 페이지나타내는 수랑 비교해서 나머지가 있으면 페이지 추가
+            // }
             let html = '';
             
             if (prev > 0) {
@@ -76,35 +90,25 @@ $().ready(() => {
         },
     });
 });
-/* ajax로 게시글 몇개인지 받아오기 */
-$.ajax({
-    type: 'GET',
-    url: '/HTML/Page',
-    dataType: 'json',
-    async: false,
-    success(res) {
-        const res1 = JSON.stringify(res);
-        totalCount = res[0].idx;
-    },
-});
+
 
 /* 데이터 보기 클릭이벤트로 돌아감 */
 $('#List').on('click', '.Paging', (e) => {
-  console.log(e);
-  console.log(e.currentTarget.children[0].innerText);
-  idx = e.currentTarget.children[0].innerText;
-  title = e.currentTarget.children[1].innerText;
-  text = e.currentTarget.children[2].innerText;
-  writer = e.currentTarget.children[3].innerText;
-  $.ajax({
+    console.log(e);
+    console.log(e.currentTarget.children[0].innerText);
+    idx = e.currentTarget.children[0].innerText;
+    title = e.currentTarget.children[1].innerText;
+    text = e.currentTarget.children[2].innerText;
+    writer = e.currentTarget.children[3].innerText;
+    $.ajax({
     type: 'GET',
     url: '/HTML/Update',
     dataType: 'json',
     data: {
- idx: e.currentTarget.children[0].innerText,
-      title: e.currentTarget.children[1].innerText,
-      text: e.currentTarget.children[2].innerText,
-      writer: e.currentTarget.children[3].innerText,
+    idx: e.currentTarget.children[0].innerText,
+    title: e.currentTarget.children[1].innerText,
+    text: e.currentTarget.children[2].innerText,
+    writer: e.currentTarget.children[3].innerText,
     },
     success(res) {
             const res1 = JSON.stringify(res);
