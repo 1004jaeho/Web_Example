@@ -1,46 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
 </head>
 <body>
-        <!-- 로그인 -->
-        <h1>로그인 페이지</h1>
-        <div>          
-            <input id ="input_ID" type="text" name="userid" placeholder="아이디 입력해주세요" maxlength="20">
-            <input id ="input_PW" type="password" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
-            <button type="button" id = "Login"> 로그인 </button>
-            <button type="reset" id = "reset" > 리셋</button>
-        </div> 
-
-        <script>
-        //  리셋
-        $('#reset').click(() => {
-            window.location.href="http://localhost:8080/html/Login.html";
-        });
-        //  로그인
-        $('#Login').click(() => {
-            const id = $('#input_ID').val();
-            const pw = $('#input_PW').val();
-            $.ajax({
-                type : 'POST',
-                url : '/html/Login', 
-                data: {userid : id, password : pw},
-                success : function(res) {
-                    if (res === 'success') {
-                        alert('success');
-                        window.location.href = "http://localhost:8080/html/Board.html";
-                    } 
-                },error : function(err){
-                        // alert('fail');
-                        // window.location.href="http://localhost:8080/html/Login.html";
-            }
-            });
-        });
-        </script>
+    <h1>로그인 페이지</h1>
+    
+    <input id ="input_ID" type="text" name="userid" placeholder="아이디 입력해주세요" maxlength="20">
+    <input id ="input_PW" type="password" name="password" placeholder="비밀번호 입력해주세요" maxlength="20"> 
+    <button type="button" id = "Login" > 로그인 </button>
+    <button type="reset" id = "reset" > 리셋</button>
+    <!-- 로그인 js 액션 불러옴-->
+    <script type="text/javascript" src="/JS/Login.js"></script>
 </body>
 </html>
