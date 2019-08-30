@@ -94,21 +94,20 @@ $().ready(() => {
 
 /* 데이터 보기 클릭이벤트로 돌아감 */
 $('#List').on('click', '.Paging', (e) => {
-    console.log(e);
-    console.log(e.currentTarget.children[0].innerText);
     idx = e.currentTarget.children[0].innerText;
     title = e.currentTarget.children[1].innerText;
     text = e.currentTarget.children[2].innerText;
     writer = e.currentTarget.children[3].innerText;
+
     $.ajax({
     type: 'GET',
-    url: '/HTML/Update',
+    url: '/AJAX/Update',
     dataType: 'json',
     data: {
-    idx: e.currentTarget.children[0].innerText,
-    title: e.currentTarget.children[1].innerText,
-    text: e.currentTarget.children[2].innerText,
-    writer: e.currentTarget.children[3].innerText,
+        idx: e.currentTarget.children[0].innerText,
+        title: e.currentTarget.children[1].innerText,
+        text: e.currentTarget.children[2].innerText,
+        writer: e.currentTarget.children[3].innerText,
     },
     success(res) {
             const res1 = JSON.stringify(res);
@@ -129,7 +128,6 @@ $('#List').on('click', '.Paging', (e) => {
         },
   });
 });
-console.log(idx);
 
 /* 페이지 넘어갈때마다 클릭 이벤트 들어감 */
 let page; /* 현재 페이지를 나타냄 */
